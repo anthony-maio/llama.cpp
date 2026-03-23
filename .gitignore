@@ -129,6 +129,10 @@ poetry.toml
 /winogrande-debiased-eval.csv
 /wikitext-2-raw/
 
+# Local multimodal conversion artifacts
+/artifacts/dotsocr-src/
+/artifacts/dotsocr-src-noxet/
+
 # Test models for lora adapters
 /lora-tests
 
