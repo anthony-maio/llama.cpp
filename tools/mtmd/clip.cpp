@@ -1495,6 +1495,7 @@ struct clip_model_loader {
                     || model.proj_type == PROJECTOR_TYPE_LDPV2
                     || model.proj_type == PROJECTOR_TYPE_QWEN2VL
                     || model.proj_type == PROJECTOR_TYPE_QWEN25VL
+                    || model.proj_type == PROJECTOR_TYPE_DOTS_OCR
                     || model.proj_type == PROJECTOR_TYPE_GLM_EDGE
                     || model.proj_type == PROJECTOR_TYPE_GEMMA3
                     || model.proj_type == PROJECTOR_TYPE_IDEFICS3

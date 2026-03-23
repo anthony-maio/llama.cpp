@@ -4312,11 +4312,11 @@ class DotsOCRVisionModel(Qwen2VLVisionModel):
         name = name.replace(".patch_embed.patchifier.proj.", ".patch_embed.proj.")
         name = name.replace(".patch_embed.patchifier.norm.", ".post_conv_layernorm.")
 
-        # Handle SiLU gated MLP: fc1=gate, fc2=up, fc3=down
+        # Handle SiLU gated MLP: fc1=gate, fc3=up, fc2=down
         # (differs from Qwen2-VL where fc1=up, fc2=down with GELU)
         name = name.replace(".mlp.fc1.", ".mlp.gate_proj.")
-        name = name.replace(".mlp.fc2.", ".mlp.up_proj.")
-        name = name.replace(".mlp.fc3.", ".mlp.down_proj.")
+        name = name.replace(".mlp.fc2.", ".mlp.down_proj.")
+        name = name.replace(".mlp.fc3.", ".mlp.up_proj.")
 
         # post_trunk_norm → v.post_ln (build_vit applies after VIT loop)
         if "post_trunk_norm" in name:
