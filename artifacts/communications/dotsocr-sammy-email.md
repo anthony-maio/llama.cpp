@@ -2,13 +2,31 @@ Subject: DotsOCR test steps and the correct command
 
 Hi Sammy,
 
-I think there are two separate issues in the test:
+I found the remaining runtime issue.
+
+The `mmproj` file was already correct. The remaining bug was in the DotsOCR runtime graph in `llama.cpp`.
+
+I fixed it here:
+https://github.com/anthony-maio/llama.cpp
+
+Latest fix commit:
+https://github.com/anthony-maio/llama.cpp/commit/7d6933756
+
+The problem was that DotsOCR patch embeddings were being handled with the wrong layout before the first norm/projection step. That caused the `ggml_can_repeat` assertion during projector warmup.
+
+Please rebuild again from the latest `master` and test with the same command.
+
+For reference, this is what I verified locally after the fix:
+
+- projector warmup passed
+- model entered chat mode successfully
+
+Your command format was already basically correct after switching to `llama-mtmd-cli.exe`.
+
+There are still two practical points to keep:
 
 1. The executable for single-image OCR should be `llama-mtmd-cli.exe`, not `llama-cli.exe`.
 2. The `mmproj-Dots.Ocr-F16.gguf` file in your AppData path may still be the older file.
-
-I fixed the DotsOCR branch here:
-https://github.com/anthony-maio/llama.cpp
 
 I also refreshed the corrected `mmproj` file here:
 https://huggingface.co/anthonym21/dots.ocr-GGUF
