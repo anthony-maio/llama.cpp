@@ -30,20 +30,11 @@ ggml_cgraph * clip_graph_dots_ocr::build() {
     int mrope_sections[4] = {d_head/4, d_head/4, 0, 0};
 
     // --- Patch Embedding: single Conv2D (no Conv3D temporal split) ---
-    ggml_tensor * inp_raw = build_inp_raw();
-    ggml_tensor * inp = ggml_conv_2d(ctx0, model.patch_embeddings_0, inp_raw,
-                                      patch_size, patch_size, 0, 0, 1, 1);
-
+    // Match the source model's patchifier path exactly:
+    // conv2d -> flatten to tokens -> add channel bias -> RMSNorm.
     GGML_ASSERT(model.patch_embeddings_1 == nullptr); // no second conv for dots.ocr
-
-    // Add patch embedding bias if present
-    if (model.patch_bias) {
-        inp = ggml_add(ctx0, inp, model.patch_bias);
-    }
-
-    // Reshape: [c, w, h, b] -> [n_embd, n_patches, batch]
-    inp = ggml_permute(ctx0, inp, 1, 2, 0, 3);
-    inp = ggml_cont_3d(ctx0, inp, n_embd, n_patches_x * n_patches_y, batch_size);
+    ggml_tensor * inp = build_inp();
+    inp = ggml_reshape_3d(ctx0, inp, n_embd, n_patches, batch_size);
 
     // Patch embedding norm (RMSNorm, no bias)
     if (model.norm_embd_w) {
